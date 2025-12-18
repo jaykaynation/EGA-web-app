@@ -14,7 +14,7 @@ app.add_middleware(
   allow_headers=["*"],
 )
 
-# this mounts the playlist router from the playlist_api
+# mount the playlist router from the playlist_api
 app.include_router(playlist_router, prefix="/api/playlist_api")
 
 # Start the server (run with uvicorn)
