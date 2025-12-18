@@ -16,9 +16,9 @@
         <div class="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
           <!-- Logo -->
           <div class="flex flex-shrink-0 items-center mr-4" to="/">
-            <img class="h-10 w-auto" src="./assets/logo.jpeg" alt="AI MUSIC" />
+            <img class="h-10 w-auto" src="./assets/logo.jpeg" alt="TuneAI Logo" />
             <span class="hidden md:block text-2xl font-bold ml-2">
-              AI MUSIC
+              TuneAI
             </span>
           </div>
           <div class="md:ml-auto">
