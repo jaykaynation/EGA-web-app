@@ -17,8 +17,13 @@ app.add_middleware(
 # mount the playlist router from the playlist_api
 app.include_router(playlist_router, prefix="/api/playlist_api")
 
+# Fast API health check for the API
+@app.get("/health")
+async def health_check():
+  return {"status": "ok"}
+
 # Start the server (run with uvicorn)
 if __name__ == "__main__":
   import uvicorn
   port = int(os.environ.get("PORT", 3000))
-  uvicorn.run(app, host="0.0.0.0", port=port)
+  uvicorn.run(app, host="127.0.0.1", port=port)

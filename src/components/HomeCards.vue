@@ -26,7 +26,7 @@
       console.log(selectedGenre.name) 
       
       //post request to backend here
-      const res = await axios.post('http://localhost:3000/api/playlist_api', { genre: selectedGenre.name });
+      const res = await axios.post('/api/playlist_api', { genre: selectedGenre.name });
       const newPlaylist = res.data;
 
       returnedPlaylist.content = newPlaylist.songs;
