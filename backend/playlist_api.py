@@ -12,10 +12,14 @@ import unicodedata
 load_dotenv()
 router = APIRouter()
 
-# instantize the client and point to hugging face router
+api_key = os.getenv("HF_TOKEN")
+  
+if not api_key:
+  raise ValueError("HF_TOKEN ENVIRONMENT VARIABLE IS MISSING")
+  
 client = OpenAI(
   base_url="https://router.huggingface.co/v1",
-  api_key=os.getenv("HF_TOKEN"),
+  api_key=api_key,
 )
 
 # this function will sanitize the genre input
