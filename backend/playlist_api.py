@@ -5,6 +5,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from openai import OpenAI
 import re
+import unicodedata
 
 
 # load the secret file and FastApi router
@@ -17,35 +18,49 @@ client = OpenAI(
   api_key=os.getenv("HF_TOKEN"),
 )
 
+# this function will sanitize the genre input
+def sanitize_genre(genre_value: str) -> str:
+  # normalize unicode
+  genre_value = unicodedata.normalize("NFC", genre_value)
+
+  # remove scripts, collapse genre and aggresively truncate
+  script_chars = r'[{}\[\]()<>"\'`\\|;:]'
+  genre_value = re.sub(script_chars, '', genre_value)
+  genre_value = re.sub(r'\s+', ' ', genre_value).strip()
+  genre_value = genre_value[:50]
+
+  print('Sanitized the genre input:', genre_value)  
+  return genre_value
+
 # handle the post request from the frontend
 @router.post("/")
 async def generate_playlist(request: Request):
   body = await request.json()
-  genre = body.get("genre")
 
-  # On-purpose errors values print to terminal
-  print(genre)
+  raw_genre = body.get("genre")
 
-  if not genre:
-    return JSONResponse(status_code=400, content={"error": "Genre is required"})
+  # Type check
+  if not isinstance(raw_genre, str):
+    return JSONResponse(status_code=400, content={"error": "GENRE MUST BE A STRING"})
 
-  if genre == "":
-    return JSONResponse(status_code=400, content={"error": "Genre CAANNOT BE EMPTY"})
+  # implement the sanitization function
+  safe_genre = sanitize_genre(raw_genre)
+  if safe_genre != raw_genre:
+    print('Scripts detected in the genre input', raw_genre)
+    return JSONResponse(status_code=400, content={"error": f"There was something wrong with the input {raw_genre}"})
 
-  # Type check and sanitization
-  if not isinstance(genre, str):
-    return JSONResponse(status_code=400, content={"error": "Genre must be a string"})
+  safe_genre = safe_genre.strip()
+  
+  if not safe_genre:
+    return JSONResponse(status_code=400, content={"error": "GENRE CANNOT BE EMPTY"})
 
-  genre = genre.strip()  # Remove leading/trailing whitespace
-  if not genre:
-    return JSONResponse(status_code=400, content={"error": "Genre cannot be empty"})
-
-  if len(genre) > 100:
-    return JSONResponse(status_code=400, content={"error": "Genre too long (max 100 chars)"})
+  if len(safe_genre) > 50:
+    return JSONResponse(status_code=400, content={"error": "GENRE TOO LONG (MAX 50 CHARS)"})
 
   # Allowed chars: letters, numbers, spaces, hyphens, apostrophes (basic sanitization)
-  if not re.match(r"^[a-zA-Z0-9\s\-']+$", genre):
+  if not re.match(r"^[a-zA-Z0-9\s\-']+$", safe_genre):
     return JSONResponse(status_code=400, content={"error": "Invalid characters in genre"})
+
 
   # call to the hugging face ai model
   try:
@@ -63,7 +78,7 @@ async def generate_playlist(request: Request):
               // 3 more for total 5
             ]
           }}
-          Generate exactly 5 songs for the {genre} genre."""
+          Generate exactly 5 songs for the {safe_genre} genre."""
           }
       ],
 
