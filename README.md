@@ -6,7 +6,7 @@ TuneAI is an end-to-end music playlist platform that uses artificial intelligenc
 *(PREVIEW REMINDER)*
 
 🌐 **Live Demo**  
-[Explore the live demo](will add vercel link) *(LINK REMINDER)*
+[Explore the live demo](ega-web-app.vercel.app) *(LINK REMINDER)*
 
 ## 🚀 Features
 
