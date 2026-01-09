@@ -4,6 +4,7 @@ import os
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from openai import OpenAI
+import re
 
 
 # load the secret file and FastApi router
@@ -21,8 +22,30 @@ client = OpenAI(
 async def generate_playlist(request: Request):
   body = await request.json()
   genre = body.get("genre")
+
+  # On-purpose errors values print to terminal
+  print(genre)
+
   if not genre:
-      return JSONResponse(status_code=400, content={"error": "Genre is required"})
+    return JSONResponse(status_code=400, content={"error": "Genre is required"})
+
+  if genre == "":
+    return JSONResponse(status_code=400, content={"error": "Genre CAANNOT BE EMPTY"})
+
+  # Type check and sanitization
+  if not isinstance(genre, str):
+    return JSONResponse(status_code=400, content={"error": "Genre must be a string"})
+
+  genre = genre.strip()  # Remove leading/trailing whitespace
+  if not genre:
+    return JSONResponse(status_code=400, content={"error": "Genre cannot be empty"})
+
+  if len(genre) > 100:
+    return JSONResponse(status_code=400, content={"error": "Genre too long (max 100 chars)"})
+
+  # Allowed chars: letters, numbers, spaces, hyphens, apostrophes (basic sanitization)
+  if not re.match(r"^[a-zA-Z0-9\s\-']+$", genre):
+    return JSONResponse(status_code=400, content={"error": "Invalid characters in genre"})
 
   # call to the hugging face ai model
   try:

@@ -23,10 +23,10 @@
         return;
       }
 
-      console.log(selectedGenre.name) 
+      // console.log(selectedGenre.name) 
       
       //post request to backend here
-      const res = await axios.post('/api/playlist_api', { genre: selectedGenre.name });
+      const res = await axios.post('/api/playlist_api', { genre : selectedGenre.name });
       const newPlaylist = res.data;
 
       returnedPlaylist.content = newPlaylist.songs;
@@ -36,7 +36,14 @@
       console.log("Playlist Generated:", returnedPlaylist.content);
 
     } catch (err) {
-      console.error("Error Generating Playlist:", err)
+      const status = err.response?.status;
+      const errorText = err.response?.data?.error 
+                 ?? err.message 
+                 ?? 'Unknown error';
+
+      alert(`${status || 'Error'} – ${errorText}`);
+      console.error('Failed:', err);
+
     } finally {
       selectedGenre.loading = false;
     }
