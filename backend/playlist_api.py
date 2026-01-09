@@ -12,16 +12,6 @@ import unicodedata
 load_dotenv()
 router = APIRouter()
 
-api_key = os.getenv("HF_TOKEN")
-  
-if not api_key:
-  raise ValueError("HF_TOKEN ENVIRONMENT VARIABLE IS MISSING")
-  
-client = OpenAI(
-  base_url="https://router.huggingface.co/v1",
-  api_key=api_key,
-)
-
 # this function will sanitize the genre input
 def sanitize_genre(genre_value: str) -> str:
   # normalize unicode
@@ -39,6 +29,16 @@ def sanitize_genre(genre_value: str) -> str:
 # handle the post request from the frontend
 @router.post("/")
 async def generate_playlist(request: Request):
+  api_key = os.getenv("HF_TOKEN")
+  
+  if not api_key:
+    return JSONResponse(status_code = 500, content = {"error": "HF_TOKEN ENVIRONMENT VARIABLE IS MISSING"})
+  
+  client = OpenAI(
+    base_url="https://router.huggingface.co/v1",
+    api_key=api_key,
+  )
+
   body = await request.json()
 
   raw_genre = body.get("genre")
