@@ -66,8 +66,8 @@ pip install -r requirements.txt
 Navigate to the cloned repository and install Node dependencies.
 
 ```bash
-# Go to web app root directory
-cd /kolade-oyeyipo/
+# Go to the frontend directory
+cd frontend
 
 # Install dependencies
 npm install
@@ -81,15 +81,15 @@ Two terminals running simultaneously are needed, one for the frontend server and
 
 ### Terminal 1: Start the Backend
 ```bash
-cd /api/
+cd api
 # Ensure venv is activated
-.\venv\Scripts\python server.py
+python index.py
 ```
 The server will start at `http://127.0.0.1:3000`.
 
 ### Terminal 2: Start the Frontend
 ```bash
-cd /kolade-oyeyipo/
+cd frontend
 npm run dev
 ```
 The application will launch at `http://localhost:5173`.
@@ -120,7 +120,7 @@ Generates a curated list of exactly 5 songs based on the provided genre.
 
 ### Health Check
 - **Endpoint**: `GET /api/health`
-- **Response**: ok.
+- **Response**: HEALTHY.
 
 ---
 
@@ -128,42 +128,25 @@ Generates a curated list of exactly 5 songs based on the provided genre.
 
 ```
 kolade-oyeyipo/
-|
-├── api/
-│   ├── .env.example           # env example for API KEY
-|   ├── playlist_api.py        # Playlist generation
-│   └── server.py              # FastAPI app, CORS, router 
-|
-├── public/
-│   └── favicon.ico            # Favicon
-|
-├── src/
-│   ├── assets/
-│   │   ├── logo.jpeg
-│   │   └── main.css
-|   |
-│   ├── components/
-│   │   ├── Card.vue
-│   │   ├── Hero.vue
-│   │   ├── HomeCards.vue
-│   │   └── Navbar.vue
-|   |
-│   ├── router/
-│   │   └── index.js
-|   |
-│   ├── views/
-│   │   └── HomeView.vue
-|   |
-│   ├── App.vue                # Main application component
-│   └── main.js                # Entry point
-|
-├── index.html                 # HTML entry point
-├── jsconfig.json              # JavaScript config
-├── package.json
-├── package-lock.json
-├── postcss.config.js
-├── README.md
-├── tailwind.config.js
-└── vite.config.js             # Vite proxy configuration
+├── api/                       # Backend FastAPI service
+│   ├── .env.example           # Environment variables template
+│   ├── index.py               # Main API entry point (FastAPI)
+│   ├── playlist_api.py        # Playlist generation logic
+│   └── requirements.txt       # Python dependencies
+├── frontend/                  # Frontend Vue 3 application
+│   ├── src/
+│   │   ├── assets/            # Static assets
+│   │   ├── components/        # Reusable Vue components
+│   │   ├── router/            # Vue Router configuration
+│   │   ├── views/             # Page views
+│   │   ├── App.vue            # Root component
+│   │   └── main.js            # Frontend entry point
+│   ├── public/                # Public assets
+│   ├── index.html             # HTML template
+│   ├── package.json           # Node.js dependencies/scripts
+│   ├── tailwind.config.js     # Tailwind CSS configuration
+│   └── vite.config.js         # Vite configuration
+├── vercel.json                # Vercel deployment configuration
+└── README.md                  # Project documentation
 
 Ignore this...

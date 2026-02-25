@@ -8,7 +8,7 @@ app = FastAPI()
 # CORS so frontend can make calls to the backend
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=["http://localhost:5173"],
+  allow_origins=["http://localhost:5173", "https://ega-web-app.vercel.app"],
   allow_credentials=True,
   allow_methods=["*"],
   allow_headers=["*"],
