@@ -40,7 +40,6 @@ async def generate_playlist(request: Request):
   )
 
   body = await request.json()
-
   raw_genre = body.get("genre")
 
   # Type check
