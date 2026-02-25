@@ -18,9 +18,9 @@ app.add_middleware(
 app.include_router(playlist_router, prefix="/api/playlist_api")
 
 # Fast API health check for the API
-@app.get("/health")
+@app.get("/api/health")
 async def health_check():
-  return {"status": "ok"}
+  return {"status": "HEALTHY"}
 
 # Start the server (run with uvicorn)
 if __name__ == "__main__":
